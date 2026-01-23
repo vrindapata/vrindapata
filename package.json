@@ -1,0 +1,15 @@
+{
+  "name": "vrindapata",
+  "version": "1.0.0",
+  "description": "VrindaPata - Fresh Living Microgreens Website",
+  "scripts": {
+    "test": "npm run test:html && npm run test:css",
+    "test:html": "htmlhint \"**/*.html\"",
+    "test:css": "stylelint \"**/*.css\""
+  },
+  "devDependencies": {
+    "htmlhint": "^1.1.4",
+    "stylelint": "^16.2.1",
+    "stylelint-config-standard": "^36.0.0"
+  }
+}

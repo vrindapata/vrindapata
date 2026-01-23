@@ -1,0 +1,50 @@
+name: CI Quality Gate
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  quality-check:
+    name: Test & Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Run HTML Validation
+      run: npm run test:html
+
+    - name: Run CSS Validation
+      run: npm run test:css
+
+    - name: Security Audit
+      run: npm audit --audit-level=high
+
+  build-verify:
+    name: Build Verification
+    needs: quality-check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Verify Critical Files
+      run: |
+        if [ ! -f index.html ]; then echo "index.html missing"; exit 1; fi
+        if [ ! -f product.html ]; then echo "product.html missing"; exit 1; fi
+        if [ ! -f css/styles.css ]; then echo "css/styles.css missing"; exit 1; fi
+        echo "Build verification passed: Critical files exist."
